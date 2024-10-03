@@ -20,42 +20,42 @@ library(ggplot2)
 ggplot2::theme_set(ggplot2::theme_classic())
 ```
 
-Explanation: 
+# Explanation: 
 
-1. set.seed(5100):
+# 1. set.seed(5100):
 
-This line sets the random number generator's seed to 5100.
-In R, the random number generator produces a sequence of random numbers. Setting the seed ensures that the same sequence of random numbers is generated each time you run the code with the same seed value.
-This is useful for reproducibility, as it allows you to get exactly the same results if you need to rerun the analysis later.
-2. library(ggplot2):
+# This line sets the random number generator's seed to 5100.
+# In R, the random number generator produces a sequence of random numbers. Setting the seed ensures that the same sequence of random numbers is generated each time you run the code with the same seed value.
+# This is useful for reproducibility, as it allows you to get exactly the same results if you need to rerun the analysis later.
+# 2. library(ggplot2):
 
-This line loads the ggplot2 library, which is a powerful and popular package for creating visualizations in R.
-Once loaded, you can use ggplot2's functions and objects to create various types of plots, such as scatter plots, bar charts, line charts, and more.
-3. ggplot2::theme_set(ggplot2::theme_classic()):
+# This line loads the ggplot2 library, which is a powerful and popular package for creating visualizations in R.
+# Once loaded, you can use ggplot2's functions and objects to create various types of plots, such as scatter plots, bar charts, line charts, and more.
+# 3. ggplot2::theme_set(ggplot2::theme_classic()):
 
-This line changes the default theme for ggplot2 plots to theme_classic().
-A theme defines the overall appearance of a plot, including elements like fonts, colors, background, and axis labels.
-theme_classic() is a pre-defined theme that provides a clean and minimalist look, similar to the style of base R plots.
-By setting this theme as the default, all subsequent plots created using ggplot2 will automatically use this theme unless you explicitly specify a different one.
-Overall, this code snippet:
+# This line changes the default theme for ggplot2 plots to theme_classic().
+# A theme defines the overall appearance of a plot, including elements like fonts, colors, background, and axis labels.
+# theme_classic() is a pre-defined theme that provides a clean and minimalist look, similar to the style of base R plots.
+# By setting this theme as the default, all subsequent plots created using ggplot2 will automatically use this theme unless you explicitly specify a different one.
+# Overall, this code snippet:
 
-Sets a random seed for reproducibility.
-Loads the ggplot2 library for creating visualizations.
-Changes the default theme of ggplot2 plots to theme_classic().
-This initialization is often performed at the beginning of an R script or analysis to set up the environment and ensure consistent results.
+# Sets a random seed for reproducibility.
+# Loads the ggplot2 library for creating visualizations.
+# Changes the default theme of ggplot2 plots to theme_classic().
+# This initialization is often performed at the beginning of an R script or analysis to set up the environment and ensure consistent results.
 
 
 ## Question 1
 
-Use either the base R `plot()` function or the `ggplot2` library to plot probability mass histograms for the following discrete distributions, using the parameter values provided within each part (to avoid ambiguity in parameter names, a link to the Wikipedia page for each distribution is provided, so that you can use the sidebar in the article to find definitions for each parameter).
+# Use either the base R `plot()` function or the `ggplot2` library to plot probability mass histograms for the following discrete distributions, using the parameter values provided within each part (to avoid ambiguity in parameter names, a link to the Wikipedia page for each distribution is provided, so that you can use the sidebar in the article to find definitions for each parameter).
 
-To help you see what we're looking for, the solution to Question 1.1 is already provided for you, using both the base R `plot()` function as well as the `ggplot2` library. Note that you do **not** need to generate two histogram plots like this for each subsequent question! The examples are there to demonstrate the two possible approaches.
+# To help you see what we're looking for, the solution to Question 1.1 is already provided for you, using both the base R `plot()` function as well as the `ggplot2` library. Note that you do **not** need to generate two histogram plots like this for each subsequent question! The examples are there to demonstrate the two possible approaches.
 
-(*Hint*: For each distribution, you'll need to find the appropriate `d<distribution name>()` function.).
+# (*Hint*: For each distribution, you'll need to find the appropriate `d<distribution name>()` function.).
 
 ### Question 1.1: Binomial Distribution
 
-Construct a plot of the probability mass histogram for a [Binomially-distributed](https://en.wikipedia.org/wiki/Binomial_distribution){target='_blank'} random variable $X$, with parameter values $n = 50$ and $p = 0.33$.
+# Construct a plot of the probability mass histogram for a [Binomially-distributed](https://en.wikipedia.org/wiki/Binomial_distribution){target='_blank'} random variable $X$, with parameter values $n = 50$ and $p = 0.33$.
 
 ```{r}
 #| label: q1-1-response
@@ -74,6 +74,61 @@ binom_df <- tibble::tibble(
 binom_df |> ggplot(aes(x=x, y=pmass)) +
   geom_bar(stat='identity')
 ```
+
+#--- Explanation of the Base R Code ---
+
+# First, we need to define a sequence of numbers representing possible outcomes.
+# In the binomial case, these are the number of successes in 50 trials, so we create 
+# a sequence from 0 to 50 using the colon operator (:).
+x <- 0:50
+
+# Next, we calculate the probability mass for each outcome using the dbinom() function.
+# dbinom() gives us the probability of each number of successes based on the binomial 
+# distribution, with the size (n) of 50 trials and probability (p) of success as 0.33.
+masses <- dbinom(x, size=50, prob=0.33)
+
+# Now, we use the plot() function to create a probability mass histogram.
+# 'x' is the sequence of numbers (0 to 50), and 'masses' is the corresponding probability.
+# The argument type="h" means we want vertical lines (like a histogram), and we label 
+# the axes with xlab and ylab to show what we're plotting (Number of Successes vs Probability).
+# main provides the title for the plot.
+plot(x, masses, type="h", xlab="Number of Successes", ylab="Probability", 
+     main="Binomial Distribution (n=50, p=0.33)")
+
+#--- Explanation of the ggplot2 Code ---
+
+# Now let's do the same thing using ggplot2, which requires us to first create a data frame.
+# We use the tibble package here to create a data frame called binom_df.
+# This data frame has two columns: 
+# 'x' (0 to 50, the possible outcomes) and 'pmass' (the probability mass for each outcome).
+binom_df <- tibble::tibble(
+  x = 0:50, 
+  pmass = dbinom(x, size=50, prob=0.33)
+)
+
+# Then, we create the plot using ggplot().
+# aes(x=x, y=pmass) maps the x-axis to the sequence of outcomes (0 to 50)
+# and the y-axis to the probabilities (pmass).
+# geom_bar(stat='identity') creates the bars representing the probabilities.
+binom_df |> ggplot(aes(x=x, y=pmass)) +
+  geom_bar(stat='identity')
+
+#--- Instructions for Running this in VS Code on Windows ---
+
+# 1. Open your qmd file in VS Code.
+# 2. Make sure you have the necessary R libraries installed: ggplot2 and tibble.
+#    You can install them by running install.packages("ggplot2") and install.packages("tibble") if needed.
+# 3. Add these code blocks to your qmd file between your R code blocks (```{r} and ```).
+# 4. Save the file, and then execute the code either using the VS Code terminal or by running the chunks 
+#    directly if you're using the R extension in VS Code.
+# 5. When you knit or render the qmd file, these plots will be generated and included in your output.
+
+#--- Summary ---
+
+# - In base R, we use plot() to generate the probability mass histogram with vertical lines.
+# - In ggplot2, we use ggplot() with geom_bar(stat='identity') to create the same plot but in a different style.
+# - The key function for binomial distributions in R is dbinom(), which calculates the probabilities of each outcome.
+
 
 For the remaining parts of the question, you only need to produce **one** plot, using either the base R `plot()` function **or** the `ggplot2` library.
 
@@ -123,6 +178,58 @@ plot(x, masses, type="h", xlab="Outcomes", ylab="Probability",
 
 
 ```
+#--- Explanation of the Base R Code ---
+
+# We are using the Discrete Uniform Distribution, where every integer between 
+# 'a' and 'b' has an equal probability of being selected. 
+# In this case, 'a = 10' and 'b = 20', meaning the possible outcomes are the integers 10 through 20.
+
+# First, we install and load the extraDistr package, which contains functions for various 
+# probability distributions, including the discrete uniform distribution.
+# The if-statement checks if the package is already installed, and installs it if necessary.
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
+# Install extraDistr package if not already installed
+if (!require(extraDistr)) {
+  install.packages("extraDistr")
+}
+
+# Then we load the extraDistr library so we can use its functions in the current R session.
+library(extraDistr)
+
+# Now, we define the parameters 'a' and 'b' as 10 and 20, representing the range of possible outcomes.
+a <- 10
+b <- 20
+
+# We create a sequence 'x' from 'a' to 'b', which gives us all the possible outcomes (10 to 20).
+x <- a:b
+
+# The function ddunif() computes the probability mass for each outcome in the sequence 'x',
+# based on the discrete uniform distribution with the defined minimum and maximum values (a and b).
+# Since it's a uniform distribution, each outcome has the same probability.
+masses <- ddunif(x, min = a, max = b)
+
+# Next, we use the plot() function to generate a probability mass histogram.
+# 'x' represents the outcomes (10 to 20), and 'masses' represents the probabilities for each outcome.
+# type="h" ensures we use vertical lines to represent the histogram.
+plot(x, masses, type="h", xlab="Outcomes", ylab="Probability", 
+     main="Discrete Uniform Distribution (a=10, b=20)")
+
+#--- Instructions for Running this in VS Code on Windows ---
+
+# 1. Open your qmd file in VS Code.
+# 2. Make sure you have the extraDistr package installed. If it's not installed, 
+#    the code above will handle the installation.
+# 3. Add the code between ```{r} and ``` in your qmd file. 
+#    This will generate the Discrete Uniform Distribution plot when executed.
+# 4. Save and run the file in VS Code, either using the terminal or by executing code chunks.
+# 5. The plot will be displayed when you knit or render the qmd file.
+
+#--- Summary ---
+
+# - The Discrete Uniform Distribution gives equal probabilities to all outcomes within a range.
+# - In this case, we use the ddunif() function from the extraDistr package to compute the probabilities.
+# - The range is defined by 'a' (minimum) and 'b' (maximum), and we plot the probabilities using plot().
 
 ### Question 1.3: Bernoulli Distribution
 
@@ -144,8 +251,43 @@ masses <- c(1 - p, p)
 plot(x, masses, type="h", xlab="Outcomes", ylab="Probability", 
      main="Bernoulli Distribution (p=0.25)", ylim=c(0, 1))
 
-
 ```
+#--- Explanation of the Base R Code ---
+
+# The Bernoulli Distribution is the simplest discrete distribution, where there are only two possible outcomes:
+# 0 (failure) and 1 (success). The probability of success is 'p', and the probability of failure is '1 - p'.
+# In this question, we are given that the probability of success 'p' is 0.25.
+
+# First, we define the parameter for the Bernoulli distribution.
+p <- 0.25
+
+# The outcomes in a Bernoulli distribution are always 0 and 1, 
+# so we create a vector 'x' to represent these two outcomes.
+x <- c(0, 1)
+
+# Next, we calculate the probability mass for each outcome.
+# Since the probability of success is 'p', the probability of failure is '1 - p'.
+# We define the 'masses' vector where:
+# - The probability of getting a 0 (failure) is 1 - p.
+# - The probability of getting a 1 (success) is p.
+masses <- c(1 - p, p)
+
+# Now, we plot the probability mass histogram using the plot() function.
+# - 'x' represents the outcomes (0 and 1).
+# - 'masses' represents the probabilities for each outcome (1 - p for 0, and p for 1).
+# - type="h" ensures we use vertical lines for the histogram.
+# - xlab and ylab define labels for the x and y axes.
+# - main gives the plot a title to indicate it's a Bernoulli distribution with p = 0.25.
+# - ylim=c(0, 1) sets the limits for the y-axis to ensure the probability scale is visible from 0 to 1.
+plot(x, masses, type="h", xlab="Outcomes", ylab="Probability", 
+     main="Bernoulli Distribution (p=0.25)", ylim=c(0, 1))
+
+#--- Summary ---
+
+# - The Bernoulli distribution has two possible outcomes: 0 (failure) and 1 (success).
+# - The probability of success is 'p', and the probability of failure is '1 - p'.
+# - In this case, p = 0.25, meaning the probability of success is 25%, and the probability of failure is 75%.
+# - The plot() function is used to generate the probability mass histogram, visualizing these two probabilities.
 
 ### Question 1.4: Poisson Distribution
 
@@ -165,6 +307,46 @@ plot(x, masses, type="h", xlab="Outcomes", ylab="Probability",
 
 ```
 
+#--- Explanation of the Base R Code ---
+
+# The Poisson Distribution is used to model the number of times an event happens in a fixed interval of time or space.
+# The parameter for the Poisson distribution is 'lambda' (λ), which represents the average number of events 
+# occurring in a given interval.
+
+# In this case, we are given that λ (lambda) is 4, meaning we expect, on average, 4 events per interval.
+
+# First, we define the lambda parameter for the Poisson distribution.
+lambda <- 4
+
+# Next, we create a sequence 'x' representing possible outcomes.
+# The outcomes in a Poisson distribution are the counts of events, starting from 0 and going up.
+# We use 0:15, which gives us the values 0 through 15 as possible counts of events.
+x <- 0:15
+
+# Now, we calculate the probability mass for each outcome using the dpois() function.
+# The dpois() function computes the probability of observing each number of events (in this case, from 0 to 15)
+# for a Poisson distribution with the given lambda.
+# This gives us the probability of seeing 0, 1, 2, ..., 15 events in the interval, assuming λ = 4.
+masses <- dpois(x, lambda = lambda)
+
+# Now, we plot the probability mass histogram using the plot() function.
+# - 'x' represents the possible outcomes (0 to 15, the number of events).
+# - 'masses' represents the probabilities for each number of events.
+# - type="h" ensures we use vertical lines to create a histogram-like plot.
+# - xlab and ylab provide labels for the x-axis (Outcomes) and y-axis (Probability).
+# - main gives the plot a title, indicating it's a Poisson distribution with λ = 4.
+plot(x, masses, type="h", xlab="Outcomes", ylab="Probability", 
+     main="Poisson Distribution (lambda=4)")
+
+#--- Summary ---
+
+# - The Poisson distribution is used to model the number of times an event occurs in a fixed interval.
+# - The parameter λ (lambda) represents the average number of events per interval.
+# - In this case, λ = 4, meaning we expect 4 events on average.
+# - The dpois() function calculates the probability of each number of events occurring, from 0 to 15.
+# - The plot() function is used to create the probability mass histogram, visualizing the likelihood of each outcome.
+
+
 ### Question 1.5: Geometric Distribution
 
 Construct a plot of the probability mass histogram for a [Geometric](https://en.wikipedia.org/wiki/Geometric_distribution){target='_blank'} random variable $X$, with parameter values $p = 0.1$. Please use the **first** interpretation in the Wikipedia article, whereby $X$ is the number of **trials** required before obtaining a success.
@@ -182,6 +364,43 @@ plot(x, masses, type="h", xlab="Number of Trials", ylab="Probability",
 
 
 ```
+#--- Explanation of the Base R Code ---
+
+# The Geometric Distribution models the number of trials needed to get the first success in a series of 
+# independent Bernoulli trials, where each trial has the same probability of success, 'p'.
+
+# In this question, we are given that the probability of success 'p' is 0.1, which means there is a 10% 
+# chance of success on each trial.
+
+# First, we define the parameter 'p' for the Geometric distribution.
+p <- 0.1
+
+# The outcomes in a Geometric distribution represent the number of trials needed before we get the first success.
+# So we create a sequence 'x' from 0 to 20, representing the possible numbers of trials required to get a success.
+x <- 0:20
+
+# Now, we calculate the probability mass for each outcome using the dgeom() function.
+# The dgeom() function computes the probability of each number of trials (in this case, from 0 to 20) 
+# for a Geometric distribution with the given probability of success 'p'.
+# This gives us the probability that the first success will happen after 'x' trials.
+masses <- dgeom(x, prob = p)
+
+# Now, we plot the probability mass histogram using the plot() function.
+# - 'x' represents the possible outcomes (the number of trials before the first success).
+# - 'masses' represents the probability of each outcome (e.g., the chance of needing 1, 2, 3, etc., trials).
+# - type="h" ensures we use vertical lines to represent the histogram.
+# - xlab and ylab provide labels for the x-axis (Number of Trials) and y-axis (Probability).
+# - main gives the plot a title to indicate it's a Geometric distribution with p = 0.1.
+plot(x, masses, type="h", xlab="Number of Trials", ylab="Probability", 
+     main="Geometric Distribution (p=0.1)")
+
+#--- Summary ---
+
+# - The Geometric distribution represents the number of trials required to get the first success.
+# - The parameter 'p' is the probability of success in each trial, which is given as p = 0.1.
+# - The dgeom() function calculates the probability of achieving the first success after a certain number of trials.
+# - In this example, we calculate and plot the probability for 0 to 20 trials.
+# - The plot() function is used to create a probability mass histogram, showing the likelihood of needing each number of trials.
 
 ### Question 1.6: Hypergeometric Distribution
 
@@ -206,6 +425,77 @@ plot(x, masses, type="h", xlab="Number of Successes", ylab="Probability",
 
 
 ```
+#--- Explanation of the Base R Code ---
+
+# The Hypergeometric Distribution is used to model the probability of getting a certain number of successes 
+# in a sample drawn without replacement from a population. 
+# It has three parameters:
+# - N: Total population size.
+# - K: Total number of successes in the population.
+# - n: Number of draws (sample size).
+
+# In this case, the parameters are:
+# - N = 400 (the total population size),
+# - K = 50 (the total number of successes in the population),
+# - n = 150 (the number of draws or sample size).
+
+# First, we define the parameters for the Hypergeometric distribution.
+N <- 400  # Total population size
+K <- 50   # Total number of successes in the population
+n <- 150  # Sample size (number of draws)
+
+# The possible outcomes for this distribution are the number of successes in 'n' draws.
+# We create a sequence 'x' from 0 to the smaller of K and n (i.e., the possible number of successes).
+x <- 0:min(K, n)
+
+# Now, we calculate the probability mass for each outcome using the dhyper() function.
+# The dhyper() function computes the probability of getting 'x' successes in 'n' draws from a population of size 'N', 
+# where there are 'K' successes in the population.
+# The arguments for dhyper() are:
+# - x: The number of successes in the sample.
+# - m: The number of successes in the population (K).
+# - n: The number of failures in the population (N - K).
+# - k: The number of draws (sample size, n).
+masses <- dhyper(x, m = K, n = N - K, k = n)
+
+# Now, we plot the probability mass histogram using the plot() function.
+# - 'x' represents the possible outcomes (the number of successes in the sample).
+# - 'masses' represents the probability of each outcome (e.g., the chance of getting 0, 1, 2, etc. successes).
+# - type="h" ensures we use vertical lines for the histogram.
+# - xlab and ylab provide labels for the x-axis (Number of Successes) and y-axis (Probability).
+# - main gives the plot a title to indicate it's a Hypergeometric distribution with N=400, K=50, and n=150.
+plot(x, masses, type="h", xlab="Number of Successes", ylab="Probability", 
+     main="Hypergeometric Distribution (N=400, K=50, n=150)")
+
+#--- Summary ---
+
+# - The Hypergeometric distribution models the probability of getting a certain number of successes 
+#   in a sample drawn without replacement from a population.
+# - The parameters are:
+#   - N: Total population size (400 in this case).
+#   - K: Number of successes in the population (50 in this case).
+#   - n: Number of draws (sample size, 150 in this case).
+# - The dhyper() function is used to calculate the probability of getting each number of successes in 'n' draws.
+# - The plot() function creates a probability mass histogram to visualize these probabilities.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Question 1.7: Negative Binomial Distribution
 

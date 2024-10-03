@@ -478,25 +478,6 @@ plot(x, masses, type="h", xlab="Number of Successes", ylab="Probability",
 # - The dhyper() function is used to calculate the probability of getting each number of successes in 'n' draws.
 # - The plot() function creates a probability mass histogram to visualize these probabilities.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Question 1.7: Negative Binomial Distribution
 
 Construct a plot of the probability mass histogram for a [Negative Binomial](https://en.wikipedia.org/wiki/Negative_binomial_distribution){target='_blank'} random variable $X$, with parameter values $r = 3$ and $p = 0.5$.
@@ -519,6 +500,51 @@ plot(x, masses, type="h", xlab="Number of Failures", ylab="Probability",
 
 
 ```
+#--- Explanation of the Base R Code ---
+
+# The Negative Binomial Distribution models the number of failures before achieving a specified number of successes 
+# in a series of independent Bernoulli trials, where each trial has the same probability of success 'p'.
+
+# In this case, we are given two parameters:
+# - r = 3: The number of successes we are waiting for.
+# - p = 0.5: The probability of success in each trial (50%).
+
+# First, we define the parameters for the Negative Binomial distribution.
+r <- 3   # Number of successes
+p <- 0.5 # Probability of success in each trial
+
+# The outcomes represent the number of failures before achieving 'r' successes.
+# We create a sequence 'x' from 0 to 20, representing the possible number of failures.
+x <- 0:20
+
+# Now, we calculate the probability mass for each outcome using the dnbinom() function.
+# The dnbinom() function computes the probability of observing each number of failures (in this case, 0 to 20 failures) 
+# before achieving 'r' successes, with the given probability of success 'p'.
+# The arguments for dnbinom() are:
+# - x: The number of failures before the rth success.
+# - size: The number of successes we are waiting for (r).
+# - prob: The probability of success in each trial (p).
+masses <- dnbinom(x, size = r, prob = p)
+
+# Now, we plot the probability mass histogram using the plot() function.
+# - 'x' represents the possible outcomes (the number of failures before reaching 3 successes).
+# - 'masses' represents the probability of each outcome (e.g., the chance of getting 0, 1, 2, etc., failures before reaching 3 successes).
+# - type="h" ensures we use vertical lines to represent the histogram.
+# - xlab and ylab provide labels for the x-axis (Number of Failures) and y-axis (Probability).
+# - main gives the plot a title to indicate it's a Negative Binomial distribution with r = 3 and p = 0.5.
+plot(x, masses, type="h", xlab="Number of Failures", ylab="Probability", 
+     main="Negative Binomial Distribution (r=3, p=0.5)")
+
+#--- Summary ---
+
+# - The Negative Binomial distribution models the number of failures before achieving a specified number of successes.
+# - The parameters are:
+#   - r: The number of successes (3 in this case).
+#   - p: The probability of success in each trial (0.5 in this case).
+# - The dnbinom() function calculates the probability of observing each number of failures before reaching 'r' successes.
+# - The plot() function creates a probability mass histogram to visualize the probabilities of different failure counts.
+
+
 
 ## Question 2
 
@@ -546,6 +572,58 @@ prob_exact_4
 prob_4_or_less
 
 ```
+#--- Explanation of the R Code ---
+
+# In this problem, we are modeling a student's performance on a multiple-choice test using a Binomial Distribution.
+# There are 15 questions in total, and each question has four possible answers, with only one being correct.
+# The probability of randomly guessing the correct answer is 1/4 (or 0.25).
+# We want to compute:
+# 1. The probability of getting exactly 4 correct answers.
+# 2. The cumulative probability of getting 4 or fewer correct answers.
+
+# First, we define the parameters for the Binomial distribution:
+# - n: The total number of trials (questions), which is 15.
+# - p: The probability of success (correct answer) on each trial, which is 0.25 (since there are 4 possible answers).
+n <- 15  # Total number of questions
+p <- 0.25  # Probability of a correct answer (1 out of 4)
+x <- 4  # We are interested in exactly 4 correct answers
+
+# Now, we compute the probability of getting exactly 4 correct answers using the dbinom() function.
+# The dbinom() function gives the probability of getting 'x' successes (in this case, exactly 4 correct answers)
+# in 'n' trials, where each trial has a success probability 'p'.
+prob_exact_4 <- dbinom(x, size = n, prob = p)
+
+# Next, we calculate the cumulative probability of getting 4 or fewer correct answers using the pbinom() function.
+# The pbinom() function gives the cumulative probability of getting 'x' or fewer successes 
+# (in this case, 4 or fewer correct answers) in 'n' trials, where each trial has a success probability 'p'.
+prob_4_or_less <- pbinom(x, size = n, prob = p)
+
+# Finally, we output both probabilities:
+# - prob_exact_4: The probability of getting exactly 4 correct answers.
+# - prob_4_or_less: The cumulative probability of getting 4 or fewer correct answers.
+prob_exact_4  # Probability of exactly 4 correct answers
+prob_4_or_less  # Probability of 4 or fewer correct answers
+
+#--- Summary ---
+
+# - The dbinom() function calculates the probability of getting exactly 'x' successes (here, 4 correct answers) in 'n' trials.
+# - The pbinom() function calculates the cumulative probability of getting 'x' or fewer successes (here, 4 or fewer correct answers) in 'n' trials.
+# - In this problem, n = 15 (questions), p = 0.25 (chance of guessing a correct answer), and x = 4 (correct answers).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Question 2.2
 

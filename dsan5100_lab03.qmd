@@ -20,6 +20,31 @@ library(ggplot2)
 ggplot2::theme_set(ggplot2::theme_classic())
 ```
 
+Explanation: 
+
+1. set.seed(5100):
+
+This line sets the random number generator's seed to 5100.
+In R, the random number generator produces a sequence of random numbers. Setting the seed ensures that the same sequence of random numbers is generated each time you run the code with the same seed value.
+This is useful for reproducibility, as it allows you to get exactly the same results if you need to rerun the analysis later.
+2. library(ggplot2):
+
+This line loads the ggplot2 library, which is a powerful and popular package for creating visualizations in R.
+Once loaded, you can use ggplot2's functions and objects to create various types of plots, such as scatter plots, bar charts, line charts, and more.
+3. ggplot2::theme_set(ggplot2::theme_classic()):
+
+This line changes the default theme for ggplot2 plots to theme_classic().
+A theme defines the overall appearance of a plot, including elements like fonts, colors, background, and axis labels.
+theme_classic() is a pre-defined theme that provides a clean and minimalist look, similar to the style of base R plots.
+By setting this theme as the default, all subsequent plots created using ggplot2 will automatically use this theme unless you explicitly specify a different one.
+Overall, this code snippet:
+
+Sets a random seed for reproducibility.
+Loads the ggplot2 library for creating visualizations.
+Changes the default theme of ggplot2 plots to theme_classic().
+This initialization is often performed at the beginning of an R script or analysis to set up the environment and ensure consistent results.
+
+
 ## Question 1
 
 Use either the base R `plot()` function or the `ggplot2` library to plot probability mass histograms for the following discrete distributions, using the parameter values provided within each part (to avoid ambiguity in parameter names, a link to the Wikipedia page for each distribution is provided, so that you can use the sidebar in the article to find definitions for each parameter).
